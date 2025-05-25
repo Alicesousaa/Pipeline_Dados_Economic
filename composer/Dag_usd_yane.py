@@ -16,7 +16,6 @@ def get_usd_cny_data(**kwargs):
         # Minha chave da API (uso uma válida e com cota disponível)
         api_key = 'ELUGE0PWVIMRDQRK'
         start_date = '1991-01-01'
-        end_date = datetime.today().strftime('%Y-%m-%d')
 
         # Faço a requisição à API da Alpha Vantage
         url = 'https://www.alphavantage.co/query'
@@ -74,10 +73,10 @@ def get_usd_cny_data(**kwargs):
 
 # Parâmetros padrão da DAG
 default_args = {
-    'owner': 'alice',
+    'owner': 'airflow',
     'depends_on_past': False,
     'start_date': datetime(2025, 5, 12),
-    'retries': 1,
+    'retries': 3,
     'retry_delay': timedelta(minutes=5),
 }
 
@@ -88,7 +87,7 @@ with DAG(
     description='Extrai dados USD/CNY da Alpha Vantage e salva no bucket do Composer (GCS)',
     schedule_interval='@monthly',
     catchup=False,
-    tags=['cambio', 'api', 'alpha_vantage', 'composer'],
+    tags=['cambio', 'api'],
 ) as dag:
 
     # Tarefa única: extrai os dados e salva no GCS automaticamente
